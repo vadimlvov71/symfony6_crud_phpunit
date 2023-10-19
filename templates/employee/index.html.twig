@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Employee index{% endblock %}
+
+{% block body %}
+    <h1>Employee index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>LastName</th>
+                <th>Email</th>
+                <th>currentSalary</th>
+                <th>dateToBeHired</th>
+                <th>dataEntityCreated</th>
+                <th>dataEntityCreated</th>
+                <th>dateEntityUpdated</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for employee in employees %}
+            <tr>
+                <td>{{ employee.id }}</td>
+                <td>{{ employee.name }}</td>
+                <td>{{ employee.lastName }}</td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.currentSalary }}</td>
+                <td>{{ employee.dateToBeHired }}</td>
+                <td>{{ employee.dataEntityCreated }}</td>
+                <td>{{ employee.dateEntityUpdated }}</td>
+                <td>
+                    <a href="{{ path('app_employee_show', {'id': employee.id}) }}">show</a>
+                    <a href="{{ path('app_employee_edit', {'id': employee.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_employee_new') }}">Create new</a>
+
+
+    <script>
+    addToBlacklist();
+   
+    function addToBlacklist() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/employee/api/');
+    var jsonObj;
+    xhr.onreadystatechange = function () {
+        if (xhr.status != 200) {
+        // обработать ошибку
+            console.log( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
+        } else {
+        // вывести результат
+            console.log( xhr.responseText ); // responseText -- текст ответа.
+        }
+        //console.log(xhr.responseText);
+        /*if (jsonObj.status_code === 200) {
+            alert('Added');
+            //Add the new word to the end of the list in the grid view
+        } else {
+            alert('Add failed');
+        }*/
+    }
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+    }
+    </script>
+{% endblock %}

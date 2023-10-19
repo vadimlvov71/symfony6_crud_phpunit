@@ -1,0 +1,11 @@
+# config/validator/validation.yaml
+App\Entity\Employee:
+    properties:
+        name:
+            - NotBlank: ~
+        dateToBeHired:
+            - NotBlank: ~
+            #- Type: \DateTime
+        email:
+            - Email:
+                message: The email "{{ value }}" is not a valid email.

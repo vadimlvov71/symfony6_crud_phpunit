@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Employee{% endblock %}
+
+{% block body %}
+    <h1>Create new Employee</h1>
+
+    {{ include('employee/_form.html.twig') }}
+    <button id="byJson">submit by json</button>
+    <a href="{{ path('app_employee_index') }}">back to list</a>
+     <script>
+     let employee_date_to_be_hired = document.getElementById('employee_date_to_be_hired');
+        employee_date_to_be_hired.setAttribute("type", "date");
+        let byJson = document.getElementById('byJson');
+        byJson.addEventListener("click", handler);
+
+    
+        function handler() {
+            console.log(document.forms[0].getElementsByTagName("input"));
+            let inputs = document.forms[0].getElementsByTagName("input");
+            let obj = {};
+            for(x=0; x < inputs.length; x++) {
+                let item = inputs.item(x);
+                obj[item.name] = item.value;
+            }
+            console.log("body:");
+            let body = JSON.stringify(obj);
+            console.log(body);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/employee/api/new');
+            xhr.onreadystatechange = function () {
+                if (xhr.status != 200) {
+                    console.log( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
+                } else {
+                    console.log( xhr.responseText ); // responseText -- текст ответа.
+                }
+            }
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(body);
+        }
+    </script>
+{% endblock %}
