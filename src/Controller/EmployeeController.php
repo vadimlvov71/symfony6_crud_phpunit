@@ -27,6 +27,7 @@ class EmployeeController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $employee = new Employee();
+        
         $form = $this->createForm(EmployeeType::class, $employee);
         $form->handleRequest($request);
 
@@ -41,6 +42,9 @@ class EmployeeController extends AbstractController
             'employee' => $employee,
             'form' => $form,
         ]);
+        
+        //$response['aaa'] = "test";
+        //return $this->json($response);
     }
 
     #[Route('/{id}', name: 'app_employee_show', methods: ['GET'])]

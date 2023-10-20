@@ -55,14 +55,16 @@ class EmployeeApiController extends AbstractController
                 new Assert\GreaterThan(99)
             ],
             'employee[date_to_be_hired]' => [
-                new Assert\DateTime(),
+                //new Assert\NotBlank(),
+                new Assert\Date(),
+                new Assert\GreaterThanOrEqual('today')
             ],
-            'employee[data_entity_created]' => [
-                new Assert\DateTime(),
+           /* 'employee[data_entity_created]' => [
+                new Assert\Date(),
             ],
             'employee[date_entity_updated]' => [
-                new Assert\DateTime(),
-            ],
+                new Assert\Date(),
+            ],*/
         ]);
         $employee = new Employee();
         $response = [];
@@ -73,7 +75,8 @@ class EmployeeApiController extends AbstractController
 
         $postData = $request->toArray();
         //$test = $postData['test'];
-        $name = $postData['employee[name]'];
+        $postData['employee[current_salary]'] = (int)$postData['employee[current_salary]'];
+        $postData['employee[date_to_be_hired]'] =  \DateTime::createFromFormat('Y-m-d', $postData['employee[date_to_be_hired]']);
         //$errors = $validator->validate($employee);
         $validationResult = $validator->validate($postData, $constraints); 
         if(count($validationResult) > 0){
@@ -81,14 +84,24 @@ class EmployeeApiController extends AbstractController
                 $responseItem[$result->getPropertyPath()] = $result->getMessage();
             }  
             $response['error'] = $responseItem;
+        }else{
+            $employee->setName($postData['employee[name]']);
+            $employee->setLastName ($postData['employee[lastName]']);
+            $employee->setEmail($postData['employee[email]']);
+            $employee->setCurrentSalary($postData['employee[current_salary]']);
+            $employee->setDateToBeHired($postData['employee[date_to_be_hired]']);
+            $employee->setDataEntityCreated(date(('Y-m-d')));
+            /*$employee->setName('aaaaa');
+            $employee->setLastName('aaaaa');
+            $employee->setEmail('aaaaa@aaa.a');
+            $employee->setCurrentSalary('101');
+            $employee->setDateToBeHired('2023-10-20');
+            $employee->setDataEntityCreated(date(('Y-m-d')));
+            */
+            $entityManager->persist($employee);
+            $entityManager->flush();
+            $response['status'] = "success";
         }
-        $response['error1'] = $validationResult[1]->getPropertyPath();
-        if (!isset($parameters['employee[name]'])){
-            //$response['error'] = count($validationResult);
-            //$response['error1'] = $validationResult[1];
-           // return $this->json($data);
-        }
-        $response['test'] = $name;
         return $this->json($response);
     }
 

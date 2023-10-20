@@ -17,8 +17,8 @@ class EmployeeType extends AbstractType
         ->add('email')
         ->add('current_salary')
         ->add('date_to_be_hired')
-        ->add('data_entity_created')
-        ->add('date_entity_updated')
+        //->add('data_entity_created')
+        //->add('date_entity_updated')
         ;
     }
 

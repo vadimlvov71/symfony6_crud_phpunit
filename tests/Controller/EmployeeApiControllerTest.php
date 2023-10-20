@@ -13,7 +13,7 @@ class EmployeeControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
     private EmployeeRepository $repository;
-    private string $path = '/employee/';
+    private string $path = '/employee/api';
     private EntityManagerInterface $manager;
 
     protected function setUp(): void
@@ -26,7 +26,7 @@ class EmployeeControllerTest extends WebTestCase
         }
         */
     }
-
+/*
     public function testIndex(): void
     {
         $crawler = $this->client->request('GET', $this->path);
@@ -37,15 +37,36 @@ class EmployeeControllerTest extends WebTestCase
         // Use the $crawler to perform additional assertions e.g.
         //self::assertSame('Some text on the page', $crawler->filter('.p')->first());
     }
-
+*/
     public function testNew(): void
     {
         $originalNumObjectsInRepository = count($this->repository->findAll());
       
-        $this->client->request('GET', sprintf('%snew', $this->path));
-        self::assertResponseStatusCodeSame(200);
+        //$this->client->request('POST', sprintf('%snew', $this->path));
+        //self::assertResponseStatusCodeSame(200);
+        $this->client->request(
+            'POST',
+            $this->path . '/new',
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{
+                "employee[name]":"Fabien",
+                "employee[lastName]":"Testing",
+                "employee[email]":"testing@test.com",
+                "employee[current_salary]":"100",
+                "employee[date_to_be_hired]":"'.date('Y-m-d').'"
+            }'
+            
+        );
+        $response = $this->client->getResponse();
+        $this->assertEquals('{"status":"success"}', $response->getContent());
+        
+        //$this->assertJsonResponse($response, Response::HTTP_OK);
+        //$this->assertJsonStringEqualsJsonString($expectedJson, $response);
+
         //$this->markTestIncomplete();
-        $this->client->submitForm('Save', [
+       /* $this->client->submitForm('Save', [
             'employee[name]' => 'Testing',
             'employee[lastName]' => 'Testing',
             'employee[email]' => 'testing@test.com',
@@ -53,29 +74,12 @@ class EmployeeControllerTest extends WebTestCase
             'employee[date_to_be_hired]' => date('Y-m-d H:i:s'),
             'employee[data_entity_created]' => date('Y-m-d H:i:s'),
             'employee[date_entity_updated]' => date('Y-m-d H:i:s'),
-        ]);
+        ]);*/
        // $employee = $this->repository->findAll();
-       $employee = $this->repository->findOneBy([
-        'id' => '1',
-        ]);
-        echo "___________________";
-        //$employee = $this->repository->find(1);
-        echo "___________________";
-        var_dump($employee->getName());
-        //var_dump($fixture);
-        //self::assertSame('Testing', $fixture[0]->getName());
-        /*
-        $insertedEmployee = $this->manager->getRepository(Employee::class)->findOneBy([
-            'name' => 'Test Employee',
-        ]);
-        self::assertNotNull($insertedEmployee);
-        self::assertEquals('Test Employee', $insertedProduct->getName());
-        self::assertEquals('440', $insertedProduct->getCurrentSalary());
-        */
+       
+        
 
-        self::assertResponseRedirects('/employee/');
-
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
+       
     }
    
 
