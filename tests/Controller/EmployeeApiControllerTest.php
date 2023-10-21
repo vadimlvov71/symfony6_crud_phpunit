@@ -55,9 +55,10 @@ class EmployeeControllerTest extends WebTestCase
                 "employee[lastName]":"Testing",
                 "employee[email]":"testing@test.com",
                 "employee[current_salary]":"100",
-                "employee[date_to_be_hired]":"'.date('Y-m-d').'"
+                
+                "employee[date_to_be_hired]":"2023-10-21"
             }'
-            
+            //"employee[date_to_be_hired]":"'.date('Y-m-d').'"
         );
         $response = $this->client->getResponse();
         $this->assertEquals('{"status":"success"}', $response->getContent());

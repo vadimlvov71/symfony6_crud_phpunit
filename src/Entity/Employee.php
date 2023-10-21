@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EmployeeRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
@@ -24,8 +25,8 @@ class Employee
     
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $dateToBeHired = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateToBeHired = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $dataEntityCreated = null;
@@ -77,12 +78,12 @@ class Employee
         return $this;
     }
 
-    public function getDateToBeHired(): ?string
+    public function getDateToBeHired(): ?\DateTimeInterface
     {
         return $this->dateToBeHired;
     }
 
-    public function setDateToBeHired(string $dateToBeHired): static
+    public function setDateToBeHired(\DateTimeInterface $dateToBeHired): static
     {
         $this->dateToBeHired = $dateToBeHired;
 
@@ -124,4 +125,8 @@ class Employee
 
         return $this;
     }
+    /* public function __toString()
+    {
+        return $this->dateToBeHired;
+    }*/
 }

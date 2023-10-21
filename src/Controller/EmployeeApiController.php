@@ -39,6 +39,7 @@ class EmployeeApiController extends AbstractController
     #[Route('/new', name: 'app_employee_api_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, validatorInterface $validator): Response
     {
+        $today = strtotime('today UTC');
         $constraints = new Assert\Collection([
             'employee[name]' => [
                 new Assert\NotBlank()
@@ -55,8 +56,9 @@ class EmployeeApiController extends AbstractController
                 new Assert\GreaterThan(99)
             ],
             'employee[date_to_be_hired]' => [
-                //new Assert\NotBlank(),
-                new Assert\Date(),
+                new Assert\NotBlank(),
+                //new Assert\Type("DATETIME_MUTABLE"),
+                //new Assert\Date(),
                 new Assert\GreaterThanOrEqual('today')
             ],
            /* 'employee[data_entity_created]' => [
@@ -66,30 +68,32 @@ class EmployeeApiController extends AbstractController
                 new Assert\Date(),
             ],*/
         ]);
-        $employee = new Employee();
+        //$employee = new Employee();
         $response = [];
         $responseItem = [];
 
-           // $entityManager->persist($employee);
-           // $entityManager->flush();
-
         $postData = $request->toArray();
-        //$test = $postData['test'];
+
         $postData['employee[current_salary]'] = (int)$postData['employee[current_salary]'];
         $postData['employee[date_to_be_hired]'] =  \DateTime::createFromFormat('Y-m-d', $postData['employee[date_to_be_hired]']);
-        //$errors = $validator->validate($employee);
+        
         $validationResult = $validator->validate($postData, $constraints); 
+      
         if(count($validationResult) > 0){
             foreach($validationResult as $result){
                 $responseItem[$result->getPropertyPath()] = $result->getMessage();
             }  
             $response['error'] = $responseItem;
+     
         }else{
+            $employee = new Employee();
+            //$dmy = $postData['employee[date_to_be_hired]']->format('Y-m-d');
+            $dmy = $postData['employee[date_to_be_hired]'];
             $employee->setName($postData['employee[name]']);
             $employee->setLastName ($postData['employee[lastName]']);
             $employee->setEmail($postData['employee[email]']);
             $employee->setCurrentSalary($postData['employee[current_salary]']);
-            $employee->setDateToBeHired($postData['employee[date_to_be_hired]']);
+            $employee->setDateToBeHired($dmy);
             $employee->setDataEntityCreated(date(('Y-m-d')));
             /*$employee->setName('aaaaa');
             $employee->setLastName('aaaaa');
@@ -101,6 +105,7 @@ class EmployeeApiController extends AbstractController
             $entityManager->persist($employee);
             $entityManager->flush();
             $response['status'] = "success";
+            //$response['type'] = $type;
         }
         return $this->json($response);
     }
