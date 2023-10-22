@@ -40,6 +40,32 @@ class EmployeeApiController extends AbstractController
     }
 
     #[Route('/new', name: 'app_employee_api_new', methods: ['GET', 'POST'])]
+    /**
+     * List the rewards of the specified user.
+     *
+     * This call takes into account all confirmed awards, but not pending or refused awards.
+     *
+     * @Route("/employee/api/new", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns the rewards of an user",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Employee::class, groups={"full"}))
+     *     )
+     * )
+     * @OA\Parameter(
+     *     name="name",
+     *     in="query",
+     *     description="The field used to order rewards",
+     *     @OA\Schema(type="string")
+     * )
+     * @OA\Tag(name="employee")
+     * @Security(name="Bearer")
+     */
+
+
+   
     public function new(Request $request, EntityManagerInterface $entityManager, validatorInterface $validator): Response
     {
         $today = strtotime('today UTC');

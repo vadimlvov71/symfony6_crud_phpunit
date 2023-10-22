@@ -1,5 +1,34 @@
 # config/packages/nelmio_api_doc.yaml
 nelmio_api_doc:
+    documentation:
+        servers:
+          - url: /employee/api/new
+            description: API over HTTP
+        info:
+            title: My App
+        components:
+            schemas:
+                APIResponse:
+                    description: "Response for some queries"
+                    type: string
+                    #properties: ["foo", "bar"]
+                    example: ["validate_success","insert_success"]
+                Employee:
+                    description: "Response for some queries"
+                    type: object
+                    properties:
+                        name: 
+                            type: string
+                            example: "Greta"
+                        total:
+                            type: integer
+                            example: 42
+                        #items:
+                            #type: array
+                            #items:
+                                #$ref: "#/components/schemas/ImageMetadata"
+
+
     areas:
         path_patterns: # an array of regexps (document only routes under /api, except /api/doc)
             - ^/api(?!/doc$)

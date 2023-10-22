@@ -58,6 +58,7 @@ class EmployeeControllerTest extends WebTestCase
             //"employee[date_to_be_hired]":"2023-10-21"
         );
         $response = $this->client->getResponse();
+        echo $response;
         $json_array = json_decode($response->getContent(),true);
 
         $this->assertResponseStatusCodeSame(200);
