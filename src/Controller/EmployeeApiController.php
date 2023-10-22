@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 
 #[Route('/employee/api')]
 class EmployeeApiController extends AbstractController
@@ -57,18 +60,9 @@ class EmployeeApiController extends AbstractController
             ],
             'employee[date_to_be_hired]' => [
                 new Assert\NotBlank(),
-                //new Assert\Type("DATETIME_MUTABLE"),
-                //new Assert\Date(),
                 new Assert\GreaterThanOrEqual('today')
             ],
-           /* 'employee[data_entity_created]' => [
-                new Assert\Date(),
-            ],
-            'employee[date_entity_updated]' => [
-                new Assert\Date(),
-            ],*/
         ]);
-        //$employee = new Employee();
         $response = [];
         $responseItem = [];
 
@@ -83,29 +77,23 @@ class EmployeeApiController extends AbstractController
             foreach($validationResult as $result){
                 $responseItem[$result->getPropertyPath()] = $result->getMessage();
             }  
-            $response['error'] = $responseItem;
-     
+            $response['validate_error'] = $responseItem;
         }else{
-            $employee = new Employee();
-            //$dmy = $postData['employee[date_to_be_hired]']->format('Y-m-d');
-            $dmy = $postData['employee[date_to_be_hired]'];
-            $employee->setName($postData['employee[name]']);
-            $employee->setLastName ($postData['employee[lastName]']);
-            $employee->setEmail($postData['employee[email]']);
-            $employee->setCurrentSalary($postData['employee[current_salary]']);
-            $employee->setDateToBeHired($dmy);
-            $employee->setDataEntityCreated(date(('Y-m-d')));
-            /*$employee->setName('aaaaa');
-            $employee->setLastName('aaaaa');
-            $employee->setEmail('aaaaa@aaa.a');
-            $employee->setCurrentSalary('101');
-            $employee->setDateToBeHired('2023-10-20');
-            $employee->setDataEntityCreated(date(('Y-m-d')));
-            */
-            $entityManager->persist($employee);
-            $entityManager->flush();
-            $response['status'] = "success";
-            //$response['type'] = $type;
+            $response[] = "validate_success";
+            try {
+                $employee = new Employee();
+                $employee->setName($postData['employee[name]']);
+                $employee->setLastName ($postData['employee[lastName]']);
+                $employee->setEmail($postData['employee[email]']);
+                $employee->setCurrentSalary($postData['employee[current_salary]']);
+                $employee->setDateToBeHired($postData['employee[date_to_be_hired]']);
+                $employee->setDataEntityCreated(date(('Y-m-d')));
+                $entityManager->persist($employee);
+                $entityManager->flush();
+                $response[] = "insert_success";
+            } catch (\Exception $e) {
+                $response['insert_errror'] = $e->getMessage();
+            }
         }
         return $this->json($response);
     }

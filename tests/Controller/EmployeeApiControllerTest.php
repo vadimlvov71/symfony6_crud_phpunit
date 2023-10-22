@@ -13,7 +13,7 @@ class EmployeeControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
     private EmployeeRepository $repository;
-    private string $path = '/employee/api';
+    private string $path = '/employee/api/';
     private EntityManagerInterface $manager;
 
     protected function setUp(): void
@@ -40,13 +40,10 @@ class EmployeeControllerTest extends WebTestCase
 */
     public function testNew(): void
     {
-        $originalNumObjectsInRepository = count($this->repository->findAll());
-      
-        //$this->client->request('POST', sprintf('%snew', $this->path));
-        //self::assertResponseStatusCodeSame(200);
+        
         $this->client->request(
             'POST',
-            $this->path . '/new',
+            $this->path . 'new',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -55,32 +52,17 @@ class EmployeeControllerTest extends WebTestCase
                 "employee[lastName]":"Testing",
                 "employee[email]":"testing@test.com",
                 "employee[current_salary]":"100",
+                "employee[date_to_be_hired]":"'.date('Y-m-d').'"
                 
-                "employee[date_to_be_hired]":"2023-10-21"
             }'
-            //"employee[date_to_be_hired]":"'.date('Y-m-d').'"
+            //"employee[date_to_be_hired]":"2023-10-21"
         );
         $response = $this->client->getResponse();
-        $this->assertEquals('{"status":"success"}', $response->getContent());
-        
-        //$this->assertJsonResponse($response, Response::HTTP_OK);
-        //$this->assertJsonStringEqualsJsonString($expectedJson, $response);
+        $json_array = json_decode($response->getContent(),true);
 
-        //$this->markTestIncomplete();
-       /* $this->client->submitForm('Save', [
-            'employee[name]' => 'Testing',
-            'employee[lastName]' => 'Testing',
-            'employee[email]' => 'testing@test.com',
-            'employee[current_salary]' => '100',
-            'employee[date_to_be_hired]' => date('Y-m-d H:i:s'),
-            'employee[data_entity_created]' => date('Y-m-d H:i:s'),
-            'employee[date_entity_updated]' => date('Y-m-d H:i:s'),
-        ]);*/
-       // $employee = $this->repository->findAll();
-       
-        
-
-       
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertContains('validate_success', $json_array);
+        $this->assertContains('insert_success', $json_array);
     }
    
 
