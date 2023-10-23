@@ -15,34 +15,34 @@ class EmployeeControllerTest extends WebTestCase
     private EmployeeRepository $repository;
     private string $path = '/employee/api/';
     private EntityManagerInterface $manager;
+    private $id; 
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
         $this->repository = static::getContainer()->get('doctrine')->getRepository(Employee::class);
-/*
-       foreach ($this->repository->findAll() as $object) {
-            $this->manager->remove($object);
-        }
-        */
+        $this->manager = static::getContainer()->get('doctrine')->getManager();
+        $fixture = new Employee();
+        $fixture->setName('For test1');
+        $fixture->setLastName('For test1');
+        $fixture->setEmail('fortest@test.com');
+        $fixture->setCurrentSalary('999');
+        $fixture->setDateToBeHired(\DateTime::createFromFormat('Y-m-d', date('Y-m-d')));
+        $fixture->setDataEntityCreated(date(('Y-m-d')));
+
+        $this->manager->persist($fixture);
+        $this->manager->flush();
+        $this->id = $fixture->getId();
+        echo "aaaaaaaaa___________".$this->id;
+     
     }
-/*
-    public function testIndex(): void
-    {
-        $crawler = $this->client->request('GET', $this->path);
-       
-        self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Employee index');
-       
-        // Use the $crawler to perform additional assertions e.g.
-        //self::assertSame('Some text on the page', $crawler->filter('.p')->first());
-    }
-*/
+
     public function testNew(): void
     {
         
         $this->client->request(
             'POST',
+            //"" ,
             $this->path . 'new',
             [],
             [],
@@ -58,7 +58,6 @@ class EmployeeControllerTest extends WebTestCase
             //"employee[date_to_be_hired]":"2023-10-21"
         );
         $response = $this->client->getResponse();
-        echo $response;
         $json_array = json_decode($response->getContent(),true);
 
         $this->assertResponseStatusCodeSame(200);
@@ -67,73 +66,57 @@ class EmployeeControllerTest extends WebTestCase
     }
    
 
-   /* public function testShow(): void
+    public function testShow(): void
     {
-        $this->markTestIncomplete();
-        $fixture = new Employee();
-        $fixture->setName('My Title');
-        $fixture->setLastName('My Title');
-        $fixture->setEmail('My Title');
 
-        $this->manager->persist($fixture);
-        $this->manager->flush();
-
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-
+        $this->client->request('GET', sprintf('%s%s', $this->path, $this->id));
+        
         self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains('Employee');
+        $response = $this->client->getResponse();
+        
+        $json_array = json_decode($response->getContent(),true);
 
-        // Use assertions to check that the properties are properly displayed.
-    }*/
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+        $this->assertArrayHasKey('name', $json_array);
 
-    /*public function testEdit(): void
-    {
-        $this->markTestIncomplete();
-        $fixture = new Employee();
-        $fixture->setName('My Title');
-        $fixture->setLastName('My Title');
-        $fixture->setEmail('My Title');
-
-        $this->manager->persist($fixture);
-        $this->manager->flush();
-
-        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
-
-        $this->client->submitForm('Update', [
-            'employee[name]' => 'Something New',
-            'employee[lastName]' => 'Something New',
-            'employee[email]' => 'Something New',
-        ]);
-
-        self::assertResponseRedirects('/employee/');
-
-        $fixture = $this->repository->findAll();
-
-        self::assertSame('Something New', $fixture[0]->getName());
-        self::assertSame('Something New', $fixture[0]->getLastName());
-        self::assertSame('Something New', $fixture[0]->getEmail());
     }
-
-    public function testRemove(): void
+/*
+    public function testEdit(): void
     {
-        $this->markTestIncomplete();
+        $this->client->request(
+            'POST',
+            //"" ,
+            $this->path. $this->id."/edit",
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{
+                "employee[name]":"FabienBBBB",
+                "employee[lastName]":"Testing",
+                "employee[email]":"testing@test.com",
+                "employee[current_salary]":"100",
+                "employee[date_to_be_hired]":"'.date('Y-m-d').'"
+                
+            }'
+        );
+        $response = $this->client->getResponse();
 
-        $originalNumObjectsInRepository = count($this->repository->findAll());
-
-        $fixture = new Employee();
-        $fixture->setName('My Title');
-        $fixture->setLastName('My Title');
-        $fixture->setEmail('My Title');
-
-        $this->manager->persist($fixture);
-        $this->manager->flush();
-
-        self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
-
-        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-        $this->client->submitForm('Delete');
-
-        self::assertSame($originalNumObjectsInRepository, count($this->repository->findAll()));
-        self::assertResponseRedirects('/employee/');
-    }*/
+        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+        $json_array = json_decode($response->getContent(),true);
+        $this->assertContains('validate_success', $json_array);
+        $this->assertContains('update_success', $json_array);       
+    }
+/*
+    public function testDelete(): void
+    {
+        $this->client->request('POST', sprintf('%s%s', $this->path."delete/", $this->id));
+        
+        self::assertResponseStatusCodeSame(200);
+        $response = $this->client->getResponse();
+        
+        $json_array = json_decode($response->getContent(),true);
+        $this->assertContains('delete_success', $json_array);
+    }
+    */
 }

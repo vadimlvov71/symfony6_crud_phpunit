@@ -1,11 +1,104 @@
 # config/packages/nelmio_api_doc.yaml
 nelmio_api_doc:
     documentation:
-        servers:
-          - url: /employee/api/new
-            description: API over HTTP
+        #servers:
+          #- url: /employee222/api/new
+          #  description: API over HTTP
+        paths:
+            '/employee/api/new':
+                post:
+                    description: 'Insert a new employee'
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    properties:
+                                        employee[name]:
+                                            type: string
+                                        employee[lastName]:
+                                            type: string
+                                        employee[email]:
+                                            type: string
+                                        employee[current_salary]:
+                                            oneOf: [{ type: string }, { type: integer }]
+                                        employee[date_to_be_hired]:
+                                            type: string
+                                    #type: object
+                                    example:
+                                        employee[name]: 'Greata'
+                                        employee[lastName]: 'Tuberg'
+                                        employee[email]: "greta.tuberg@test.com"
+                                        employee[current_salary]: '101'
+                                        employee[date_to_be_hired]: '2023-11-01'
+                    responses:
+                        '200':
+                            description: result of validation and insertion.
+                            content:
+                                application/json:
+                                    schema:
+                                        #type: object
+                                        example: ["validate_success","insert_success"]
+            '/employee/api/{id}':
+                get:
+                    parameters:
+                        -
+                            name: id
+                            in: path
+                            description: 'id of an employee'
+                            required: true
+                    responses:
+                        '200':
+                            description: all date of employee.
+                            #example:
+            '/employee/api/{id}/edit':
+                post:
+                    description: 'edit an employee'
+                    parameters:
+                        -
+                            name: id
+                            in: path
+                            description: 'id of an employee'
+                            required: true
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    properties:
+                                        employee[name]:
+                                            type: string
+                                        employee[lastName]:
+                                            type: string
+                                        employee[email]:
+                                            type: string
+                                        employee[current_salary]:
+                                            oneOf: [{ type: string }, { type: integer }]
+                                        employee[date_to_be_hired]:
+                                            type: string
+                                    example:
+                                        employee[name]: 'Greata Edited'
+                                        employee[lastName]: 'Tuberg Edited'
+                                        employee[email]: "greta.tuberg@test.com"
+                                        employee[current_salary]: '101'
+                                        employee[date_to_be_hired]: '2023-11-01'
+                    responses:
+                        '200':
+                            description: result of validation and updating.
+                            content:
+                                application/json:
+                                    schema:
+                                        #type: object
+                                        example: ["validate_success","update_success"]                  
+            '/employee/api/delete/{id}':
+                post:
+                    description: 'delete an employee'
+                    parameters:
+                        -
+                            name: id
+                            in: path
+                            description: 'id of an employee'
+                            required: true   
         info:
-            title: My App
+            title: Vadim and symfony
         components:
             schemas:
                 APIResponse:

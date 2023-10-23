@@ -27,8 +27,8 @@
                 <td>{{ employee.lastName }}</td>
                 <td>{{ employee.email }}</td>
                 <td>{{ employee.currentSalary }}</td>
-                <td>{{ employee.dateToBeHired }}</td>
-                <td>{{ employee.dataEntityCreated }}</td>
+                <td> {{ employee.dateToBeHired |date('d-m-Y') }}</td>
+                <td> {{ employee.dataEntityCreated }} </td>
                 <td>{{ employee.dateEntityUpdated }}</td>
                 <td>
                     <a href="{{ path('app_employee_show', {'id': employee.id}) }}">show</a>
