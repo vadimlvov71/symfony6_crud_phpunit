@@ -43,8 +43,8 @@ To get a local copy up and running follow these simple example steps.
 * two database: employee and employee_test
 * through migrations tables employee are created
 * phpunit functional tests run for crude endpoints
-### Feature
-#### OPENAPI(Swagger) is used NelmioApiDoc bundle
+##### Feature
+###### OPENAPI(Swagger) is used NelmioApiDoc bundle
 ![изображение](https://github.com/vadimlvov71/symfony6_crud_phpunit/assets/57807117/d5b4e1ae-884a-4f7a-a9a9-89538c9f31f2)
 
 
