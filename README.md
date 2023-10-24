@@ -42,8 +42,19 @@ To get a local copy up and running follow these simple example steps.
 ##### which creates:
 * two database: employee and employee_test
 * through migrations tables employee are created
+
+##### PHPUnit testing:
+
 * phpunit functional tests run for crude endpoints
+* run sh init.sh
+  ```sh
+  php bin/phpunit
+  ```
+  * but if you don\`t comment TestDelete function any records aren\`t be shown in test database`s table 'employee'
 ##### Feature
+* http://localhost:82/api/doc
+* you can see all 4 crud endpoints:
+  
 ###### OPENAPI(Swagger) is used NelmioApiDoc bundle
 ![изображение](https://github.com/vadimlvov71/symfony6_crud_phpunit/assets/57807117/d5b4e1ae-884a-4f7a-a9a9-89538c9f31f2)
 
