@@ -22,22 +22,11 @@ class EmployeeControllerTest extends WebTestCase
         $this->client = static::createClient();
         $this->repository = static::getContainer()->get('doctrine')->getRepository(Employee::class);
         $this->manager = static::getContainer()->get('doctrine')->getManager();
-        $fixture = new Employee();
-        $fixture->setName('For test1');
-        $fixture->setLastName('For test1');
-        $fixture->setEmail('fortest@test.com');
-        $fixture->setCurrentSalary('999');
-        $fixture->setDateToBeHired(\DateTime::createFromFormat('Y-m-d', date('Y-m-d')));
-        $fixture->setDataEntityCreated(date(('Y-m-d')));
-
-        $this->manager->persist($fixture);
-        $this->manager->flush();
-        $this->id = $fixture->getId();
-        echo "aaaaaaaaa___________".$this->id;
+        $this->id = '';
      
     }
 
-    public function testNew(): void
+    public function testNew()
     {
         
         $this->client->request(
@@ -59,17 +48,20 @@ class EmployeeControllerTest extends WebTestCase
         );
         $response = $this->client->getResponse();
         $json_array = json_decode($response->getContent(),true);
-
+        $id = $json_array[1];
         $this->assertResponseStatusCodeSame(200);
         $this->assertContains('validate_success', $json_array);
         $this->assertContains('insert_success', $json_array);
+        return $id;
     }
    
-
-    public function testShow(): void
+    /**
+     * @depends testNew
+     */
+    public function testShow($id): void
     {
 
-        $this->client->request('GET', sprintf('%s%s', $this->path, $this->id));
+        $this->client->request('GET', sprintf('%s%s', $this->path, $id));
         
         self::assertResponseStatusCodeSame(200);
         $response = $this->client->getResponse();
@@ -81,13 +73,16 @@ class EmployeeControllerTest extends WebTestCase
         $this->assertArrayHasKey('name', $json_array);
 
     }
-/*
-    public function testEdit(): void
+    /**
+     * @depends testNew
+     */
+    public function testEdit($id): void
     {
+        $this->id = 1;
         $this->client->request(
             'POST',
             //"" ,
-            $this->path. $this->id."/edit",
+            $this->path. $id."/edit",
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -100,6 +95,7 @@ class EmployeeControllerTest extends WebTestCase
                 
             }'
         );
+        
         $response = $this->client->getResponse();
 
         $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
@@ -107,10 +103,13 @@ class EmployeeControllerTest extends WebTestCase
         $this->assertContains('validate_success', $json_array);
         $this->assertContains('update_success', $json_array);       
     }
-/*
-    public function testDelete(): void
+    /**
+     * @depends testNew
+     */
+    
+    public function testDelete($id): void
     {
-        $this->client->request('POST', sprintf('%s%s', $this->path."delete/", $this->id));
+        $this->client->request('POST', sprintf('%s%s', $this->path."delete/", $id));
         
         self::assertResponseStatusCodeSame(200);
         $response = $this->client->getResponse();
@@ -118,5 +117,5 @@ class EmployeeControllerTest extends WebTestCase
         $json_array = json_decode($response->getContent(),true);
         $this->assertContains('delete_success', $json_array);
     }
-    */
+    
 }

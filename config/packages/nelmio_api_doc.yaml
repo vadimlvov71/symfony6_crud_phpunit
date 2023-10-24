@@ -48,7 +48,7 @@ nelmio_api_doc:
                             required: true
                     responses:
                         '200':
-                            description: all date of employee.
+                            description: all date of an employee.
                             #example:
             '/employee/api/{id}/edit':
                 post:
@@ -99,27 +99,7 @@ nelmio_api_doc:
                             required: true   
         info:
             title: Vadim and symfony
-        components:
-            schemas:
-                APIResponse:
-                    description: "Response for some queries"
-                    type: string
-                    #properties: ["foo", "bar"]
-                    example: ["validate_success","insert_success"]
-                Employee:
-                    description: "Response for some queries"
-                    type: object
-                    properties:
-                        name: 
-                            type: string
-                            example: "Greta"
-                        total:
-                            type: integer
-                            example: 42
-                        #items:
-                            #type: array
-                            #items:
-                                #$ref: "#/components/schemas/ImageMetadata"
+        
 
 
     areas:

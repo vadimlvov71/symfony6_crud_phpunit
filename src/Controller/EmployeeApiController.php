@@ -80,6 +80,7 @@ class EmployeeApiController extends AbstractController
                 $employee->setDataEntityCreated(date(('Y-m-d')));
                 $entityManager->persist($employee);
                 $entityManager->flush();
+                $response[] = $employee->getId();
                 $response[] = "insert_success";
             } catch (\Exception $e) {
                 $response['insert_errror'] = $e->getMessage();
@@ -133,7 +134,7 @@ class EmployeeApiController extends AbstractController
         }
         return $this->json($response);
     }
-/*
+
     #[Route('/delete/{id}', name: 'app_employee_ip_delete', methods: ['POST'])]
     public function delete(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
     {
@@ -147,5 +148,5 @@ class EmployeeApiController extends AbstractController
         }
 
         return $this->json($response);
-    }*/
+    }
 }
