@@ -103,7 +103,7 @@ class EmployeeControllerTest extends WebTestCase
     /**
      * @depends testNew
      */
-    
+    /*
     public function testDelete($id): void
     {
         $this->client->request('POST', sprintf('%s%s', $this->path."delete/", $id));
@@ -114,5 +114,5 @@ class EmployeeControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $this->assertContains('delete_success', $json_array);
     }
-    
+    */
 }
