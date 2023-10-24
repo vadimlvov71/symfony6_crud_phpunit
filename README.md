@@ -47,7 +47,7 @@
   ```sh
   php bin/phpunit
   ```
-  * but if you don\`t comment TestDelete function any records aren\`t be shown in test database`s table 'employee'
+  * but if you don\`t comment testDelete function any records aren\`t be shown in test database`s table 'employee'
 ##### Feature
 * http://localhost:82/api/doc
 * you can see all 4 crud endpoints:
