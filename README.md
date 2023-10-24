@@ -28,11 +28,11 @@
     ```sh
    git clone https://github.com/vadimlvov71/symfony6_crud_phpunit.git
    ```
-2. * composer
+2. Composer
   ```sh
   composer install
   ```
-3. * run sh init.sh
+3. Run init.sh
   ```sh
   sh init.sh
   ```
