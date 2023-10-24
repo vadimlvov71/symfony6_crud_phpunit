@@ -1,27 +1,27 @@
-####  symfony6_crud_phpunit
-####  About The Project 
+#####  symfony6_crud_phpunit
+##### About The Project 
 * crud of Employee Entity via JSON
 * all crud endpoints covered by phpunit functional tests
 * for OPENAPI(Swagger) is used NelmioApiDoc bundle
 
 
-### Built With
+##### Built With
 
 *  symfony 6.1
 *  phpunit
 *  OPENAPI: "nelmio/api-doc-bundle"
 
 <!-- GETTING STARTED -->
-## Getting Started
+##### Getting Started
 
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
-### Prerequisites
+##### Prerequisites
 * php 8.1
 * Mysql
 
-### Installation
+##### Installation
 
 1. Clone the repo
    ```sh
@@ -35,7 +35,7 @@ To get a local copy up and running follow these simple example steps.
   ```sh
   composer install
   ```
-3. * run sh inty.sh
+3. * run sh init.sh
   ```sh
   sh init.sh
   ```
