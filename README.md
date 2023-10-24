@@ -43,7 +43,7 @@
 ##### PHPUnit testing:
 
 * phpunit functional tests run for crude endpoints
-* run sh init.sh
+* run phpunit
   ```sh
   php bin/phpunit
   ```
