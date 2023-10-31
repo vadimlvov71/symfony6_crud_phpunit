@@ -51,7 +51,7 @@ nelmio_api_doc:
                             description: all date of an employee.
                             #example:
             '/employee/api/{id}/edit':
-                post:
+                put:
                     description: 'edit an employee'
                     parameters:
                         -
@@ -89,7 +89,7 @@ nelmio_api_doc:
                                         #type: object
                                         example: ["validate_success","update_success"]                  
             '/employee/api/delete/{id}':
-                post:
+                delete:
                     description: 'delete an employee'
                     parameters:
                         -

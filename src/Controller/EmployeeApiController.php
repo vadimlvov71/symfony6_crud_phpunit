@@ -63,17 +63,17 @@ class EmployeeApiController extends AbstractController
         
         $validationResult = $validator->validate($postData, $constraints); 
       
-        if(count($validationResult) > 0){
-            foreach($validationResult as $result){
+        if (count($validationResult) > 0) {
+            foreach ($validationResult as $result) {
                 $responseItem[$result->getPropertyPath()] = $result->getMessage();
             }  
             $response['validate_error'] = $responseItem;
-        }else{
+        } else {
             $response[] = "validate_success";
             try {
                 $employee = new Employee();
                 $employee->setName($postData['employee[name]']);
-                $employee->setLastName ($postData['employee[lastName]']);
+                $employee->setLastName($postData['employee[lastName]']);
                 $employee->setEmail($postData['employee[email]']);
                 $employee->setCurrentSalary($postData['employee[current_salary]']);
                 $employee->setDateToBeHired($postData['employee[date_to_be_hired]']);
@@ -97,7 +97,7 @@ class EmployeeApiController extends AbstractController
     }
 
     
-    #[Route('/{id}/edit', name: 'app_employee_ip_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_employee_ip_edit', methods: ['GET', 'PUT'])]
     public function edit(Request $request, Employee $employee, EntityManagerInterface $entityManager, validatorInterface $validator, EmployeeRepository $employeeRepository): Response
     {
         $constraints = Validation::getConstrains();
@@ -111,16 +111,16 @@ class EmployeeApiController extends AbstractController
         $validationResult = $validator->validate($postData, $constraints); 
         
       
-        if(count($validationResult) > 0){
-            foreach($validationResult as $result){
+        if (count($validationResult) > 0) { 
+            foreach ($validationResult as $result) {
                 $responseItem[$result->getPropertyPath()] = $result->getMessage();
             }  
             $response['validate_error'] = $responseItem;
-        }else{
+        } else {
             $response[] = "validate_success";
             try {
                 $employee->setName($postData['employee[name]']);
-                $employee->setLastName ($postData['employee[lastName]']);
+                $employee->setLastName($postData['employee[lastName]']);
                 $employee->setEmail($postData['employee[email]']);
                 $employee->setCurrentSalary($postData['employee[current_salary]']);
                 $employee->setDateToBeHired($postData['employee[date_to_be_hired]']);
@@ -135,7 +135,7 @@ class EmployeeApiController extends AbstractController
         return $this->json($response);
     }
 
-    #[Route('/delete/{id}', name: 'app_employee_ip_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_employee_ip_delete', methods: ['DELETE'])]
     public function delete(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
     {
         $response = [];

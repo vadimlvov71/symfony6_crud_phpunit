@@ -47,6 +47,7 @@ class EmployeeController extends AbstractController
         //return $this->json($response);
     }
 
+    
     #[Route('/{id}', name: 'app_employee_show', methods: ['GET'])]
     public function show(Employee $employee): Response
     {
@@ -55,7 +56,7 @@ class EmployeeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_employee_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_employee_edit', methods: ['GET', 'PUT'])]
     public function edit(Request $request, Employee $employee, EntityManagerInterface $entityManager, validatorInterface $validator): Response
     {
         $form = $this->createForm(EmployeeType::class, $employee);
@@ -93,4 +94,14 @@ class EmployeeController extends AbstractController
 
         return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
     }
+/*
+    #[Route('/curl', name: 'app_employee_curl', methods: ['GET'])]
+    public function curl(Request $request): Response
+    {
+
+   
+        
+        return $this->json($response);
+    }
+    */
 }
