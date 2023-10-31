@@ -53,7 +53,8 @@
 * you can see all 4 crud endpoints:
   
 ###### OPENAPI(Swagger) is used NelmioApiDoc bundle
-![изображение](https://github.com/vadimlvov71/symfony6_crud_phpunit/assets/57807117/47c624ce-ba9f-4ace-9b62-78db6b7236be)
+![изображение](https://github.com/vadimlvov71/symfony6_crud_phpunit/assets/57807117/eabdfd97-43ca-4789-94f3-3b7725cdb7de)
+
 
 
 
