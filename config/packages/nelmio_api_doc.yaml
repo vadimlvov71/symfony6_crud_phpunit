@@ -28,8 +28,8 @@ nelmio_api_doc:
                                         employee[name]: 'Greata'
                                         employee[lastName]: 'Tuberg'
                                         employee[email]: "greta.tuberg@test.com"
-                                        employee[current_salary]: '101'
-                                        employee[date_to_be_hired]: '2023-11-01'
+                                        employee[current_salary]: '128'
+                                        employee[date_to_be_hired]: '2023-11-07'
                     responses:
                         '200':
                             description: result of validation and insertion.
@@ -96,7 +96,34 @@ nelmio_api_doc:
                             name: id
                             in: path
                             description: 'id of an employee'
-                            required: true   
+                            required: true  
+                    
+            '/employee/api/new_salary/{id}':
+                patch:
+                    description: 'edit one field: salary'
+                    parameters:
+                        -
+                            name: id
+                            in: path
+                            description: 'id of an employee'
+                            required: true
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    properties:
+                                        employee[current_salary]:
+                                            oneOf: [{ type: string }, { type: integer }]
+                                    example:
+                                        employee[current_salary]: '1111'
+                    responses:
+                        '200':
+                            description: result of validation and updating.
+                            content:
+                                application/json:
+                                    schema:
+                                        example: ["validate_success", "salary_update_success"]  
+
         info:
             title: Vadim and symfony
         

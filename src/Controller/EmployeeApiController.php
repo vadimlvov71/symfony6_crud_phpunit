@@ -129,7 +129,41 @@ class EmployeeApiController extends AbstractController
                 $entityManager->flush();
                 $response[] = "update_success";
             } catch (\Exception $e) {
-                $response['insert_errror'] = $e->getMessage();
+                $response['update_errror'] = $e->getMessage();
+            }
+        }
+        return $this->json($response);
+    }
+
+    #[Route('/new_salary/{id}', name: 'app_employee_ip_new_salary', methods: ['GET', 'PATCH'])]
+    public function newSalary(Request $request, Employee $employee, EntityManagerInterface $entityManager, validatorInterface $validator, EmployeeRepository $employeeRepository): Response
+    {
+        $condition = "current_salary";
+        $constraints = Validation::getConstrains($condition);
+        $response = [];
+        $responseItem = [];
+        
+        $postData = $request->toArray();
+        $postData['employee[current_salary]'] = (int)$postData['employee[current_salary]'];
+                
+        $validationResult = $validator->validate($postData, $constraints); 
+        
+      
+        if (count($validationResult) > 0) { 
+            foreach ($validationResult as $result) {
+                $responseItem[$result->getPropertyPath()] = $result->getMessage();
+            }  
+            $response['validate_error'] = $responseItem;
+        } else {
+            
+            $response[] = "validate_success";
+            try {
+                $employee->setCurrentSalary($postData['employee[current_salary]']);
+                $entityManager->persist($employee);
+                $entityManager->flush();
+                $response[] = "salary_update_success";
+            } catch (\Exception $e) {
+                $response['salary_update_errror'] = $e->getMessage();
             }
         }
         return $this->json($response);
