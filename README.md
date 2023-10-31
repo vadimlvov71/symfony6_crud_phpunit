@@ -50,7 +50,7 @@
   * but if you don\`t comment testDelete function any records aren\`t be shown in test database`s table 'employee'
 ##### Feature
 * http://localhost:82/api/doc
-* you can see all 4 crud endpoints:
+* you can see all 5 crud endpoints:
   
 ###### OPENAPI(Swagger) is used NelmioApiDoc bundle
 ![изображение](https://github.com/vadimlvov71/symfony6_crud_phpunit/assets/57807117/eabdfd97-43ca-4789-94f3-3b7725cdb7de)
