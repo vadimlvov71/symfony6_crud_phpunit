@@ -3,7 +3,8 @@
 * crud of Employee Entity via JSON
 * all crud endpoints covered by phpunit functional tests
 * for OPENAPI(Swagger) is used NelmioApiDoc bundle
-
+* PSR 12 standart, except warning: length more than 120 charactrers
+  ##### only file src/Controller/EmployeeApiController.php
 
 ##### Built With
 
