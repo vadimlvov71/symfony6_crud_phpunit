@@ -18,12 +18,16 @@ use OpenApi\Annotations as OA;
 use App\Service\Validation;
 
 #[Route('/employee/api')]
+/**
+ * EmployeeApiController uses OpenAPI and has five actions:
+ * 4 ones for crud, one - for changing only one field: 'current salary'
+ * used API with five entrypoints
+ * 
+* @author Vadim Podolyan <vadim.podolyan@gmail.com>
+*
+ */
 class EmployeeApiController extends AbstractController
 {
-    
-    
-    
-    
     /**
      * List the rewards of the specified user.
      *
@@ -49,9 +53,16 @@ class EmployeeApiController extends AbstractController
     */
 
     #[Route('/new', name: 'app_employee_api_new', methods: ['GET', 'POST'])]
+    /**
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param validatorInterface $validator
+     * 
+     * @return Response
+     */
     public function new(Request $request, EntityManagerInterface $entityManager, validatorInterface $validator): Response
     {
-        
+
         $constraints = Validation::getConstrains();
         $response = [];
         $responseItem = [];
@@ -60,13 +71,13 @@ class EmployeeApiController extends AbstractController
 
         $postData['employee[current_salary]'] = (int)$postData['employee[current_salary]'];
         $postData['employee[date_to_be_hired]'] =  \DateTime::createFromFormat('Y-m-d', $postData['employee[date_to_be_hired]']);
-        
-        $validationResult = $validator->validate($postData, $constraints); 
-      
+
+        $validationResult = $validator->validate($postData, $constraints);
+
         if (count($validationResult) > 0) {
             foreach ($validationResult as $result) {
                 $responseItem[$result->getPropertyPath()] = $result->getMessage();
-            }  
+            }
             $response['validate_error'] = $responseItem;
         } else {
             $response[] = "validate_success";
@@ -88,33 +99,47 @@ class EmployeeApiController extends AbstractController
         }
         return $this->json($response);
     }
-   
+
     #[Route('/{id}', name: 'app_employee_ip_show', methods: ['GET'])]
+    /**
+     * @param Employee $employee
+     * 
+     * @return Response
+     */
     public function show(Employee $employee): Response
     {
-    
+
         return $this->json($employee);
     }
 
-    
+
     #[Route('/{id}/edit', name: 'app_employee_ip_edit', methods: ['GET', 'PUT'])]
+    /**
+     * @param Request $request
+     * @param Employee $employee
+     * @param EntityManagerInterface $entityManager
+     * @param validatorInterface $validator
+     * @param EmployeeRepository $employeeRepository
+     * 
+     * @return Response
+     */
     public function edit(Request $request, Employee $employee, EntityManagerInterface $entityManager, validatorInterface $validator, EmployeeRepository $employeeRepository): Response
     {
         $constraints = Validation::getConstrains();
         $response = [];
         $responseItem = [];
-        
+
         $postData = $request->toArray();
         $postData['employee[current_salary]'] = (int)$postData['employee[current_salary]'];
         $postData['employee[date_to_be_hired]'] =  \DateTime::createFromFormat('Y-m-d', $postData['employee[date_to_be_hired]']);
-        
-        $validationResult = $validator->validate($postData, $constraints); 
-        
-      
-        if (count($validationResult) > 0) { 
+
+        $validationResult = $validator->validate($postData, $constraints);
+
+
+        if (count($validationResult) > 0) {
             foreach ($validationResult as $result) {
                 $responseItem[$result->getPropertyPath()] = $result->getMessage();
-            }  
+            }
             $response['validate_error'] = $responseItem;
         } else {
             $response[] = "validate_success";
@@ -136,26 +161,34 @@ class EmployeeApiController extends AbstractController
     }
 
     #[Route('/new_salary/{id}', name: 'app_employee_ip_new_salary', methods: ['GET', 'PATCH'])]
+    /**
+     * @param Request $request
+     * @param Employee $employee
+     * @param EntityManagerInterface $entityManager
+     * @param validatorInterface $validator
+     * @param EmployeeRepository $employeeRepository
+     * 
+     * @return Response
+     */
     public function newSalary(Request $request, Employee $employee, EntityManagerInterface $entityManager, validatorInterface $validator, EmployeeRepository $employeeRepository): Response
     {
         $condition = "current_salary";
         $constraints = Validation::getConstrains($condition);
         $response = [];
         $responseItem = [];
-        
+
         $postData = $request->toArray();
         $postData['employee[current_salary]'] = (int)$postData['employee[current_salary]'];
-                
-        $validationResult = $validator->validate($postData, $constraints); 
-        
-      
-        if (count($validationResult) > 0) { 
+
+        $validationResult = $validator->validate($postData, $constraints);
+
+
+        if (count($validationResult) > 0) {
             foreach ($validationResult as $result) {
                 $responseItem[$result->getPropertyPath()] = $result->getMessage();
-            }  
+            }
             $response['validate_error'] = $responseItem;
         } else {
-            
             $response[] = "validate_success";
             try {
                 $employee->setCurrentSalary($postData['employee[current_salary]']);
@@ -170,6 +203,13 @@ class EmployeeApiController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'app_employee_ip_delete', methods: ['DELETE'])]
+    /**
+     * @param Request $request
+     * @param Employee $employee
+     * @param EntityManagerInterface $entityManager
+     * 
+     * @return Response
+     */
     public function delete(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
     {
         $response = [];

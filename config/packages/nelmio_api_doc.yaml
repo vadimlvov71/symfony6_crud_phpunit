@@ -79,7 +79,7 @@ nelmio_api_doc:
                                         employee[lastName]: 'Tuberg Edited'
                                         employee[email]: "greta.tuberg@test.com"
                                         employee[current_salary]: '101'
-                                        employee[date_to_be_hired]: '2023-11-01'
+                                        employee[date_to_be_hired]: '2023-11-30'
                     responses:
                         '200':
                             description: result of validation and updating.
